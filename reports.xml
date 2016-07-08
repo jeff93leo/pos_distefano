@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report
+            id="pos_distefano_cierre"
+            string="Cierre de caja"
+            model="pos.session"
+            report_type="qweb-pdf"
+            file="pos_distefano.report_cierre"
+            name="pos_distefano.report_cierre"
+        />
+
+    </data>
+</openerp>

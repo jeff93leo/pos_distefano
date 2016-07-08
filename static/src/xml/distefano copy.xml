@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="DistefanoButton">
+        <div class='control-button js_mix_match'>
+            Mix and Match
+        </div>
+    </t>
+
+    <t t-name="DistefanoPaymentReference">
+        Referencia: <input class='payment-reference-detail' name='payment-reference'></input>
+    </t>
+
+    <t t-name="DistefanoClientDetailsEdit">
+        <t t-extend="point_of_sale.ClientDetailsEdit">
+            <t t-jquery=".client-details-box" t-operation="replace">
+                <div class='client-details-left'>
+                    <div class='client-detail'>
+                        <span class='label'>Tax ID</span>
+                        <input class='detail vat' name='vat' t-att-value='partner.vat || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Street</span>
+                        <input class='detail client-address-street' name='street' value='Ciudad' t-att-value='partner.street' placeholder='Street'></input>
+                    </div>
+                </div>
+                <div class='client-details-right'>
+                    <div class='client-detail'>
+                        <span class='label'>Email</span>
+                        <input class='detail client-email'  name='email' type='email' t-att-value='partner.email || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Phone</span>
+                        <input class='detail client-phone'  name='phone' type='tel' t-att-value='partner.phone || ""'></input>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+
+    <!-- <t t-name="DistefanoClientDetailsEdit">
+        <section class='client-details edit'>
+            <div class='client-picture'>
+                <t t-if='!partner.id'>
+                    <i class='fa fa-camera'></i>
+                </t>
+                <t t-if='partner.id'>
+                    <img t-att-src='widget.partner_icon_url(partner.id)' />
+                </t>
+                <input type='file' class='image-uploader'></input>
+            </div>
+            <input class='detail client-name' name='name' t-att-value='partner.name' placeholder='Name'></input>
+            <div class='edit-buttons'>
+                <div class='button undo'><i class='fa fa-undo' /></div>
+                <div class='button save'><i class='fa fa-floppy-o' /></div>
+            </div>
+            <div class='client-details-box clearfix'>
+                <div class='client-details-left'>
+                    <div class='client-detail'>
+                        <span class='label'>Tax ID</span>
+                        <input class='detail vat' name='vat' t-att-value='partner.vat || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Street</span>
+                        <input class='detail client-address-street' name='street' value='Ciudad' t-att-value='partner.street' placeholder='Street'></input>
+                    </div>
+                </div>
+                <div class='client-details-right'>
+                    <div class='client-detail'>
+                        <span class='label'>Email</span>
+                        <input class='detail client-email'  name='email' type='email' t-att-value='partner.email || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Phone</span>
+                        <input class='detail client-phone'  name='phone' type='tel' t-att-value='partner.phone || ""'></input>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t> -->
+
+</templates>

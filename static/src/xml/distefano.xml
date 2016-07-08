@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="DistefanoMixMatch">
+        <div class='control-button'>
+            Mix and Match
+        </div>
+    </t>
+
+    <t t-name="DistefanoVendedores">
+        <span>
+            <select>
+                <option></option>
+            </select>
+        </span>
+        <span id="factura-siguiente" style="font-size: 16px">
+        </span>
+    </t>
+
+    <t t-extend="NumpadWidget">
+        <t t-jquery=".mode-button[data-mode='discount']" t-operation="replace">
+            <button class="mode-button" style="visibility: hidden" data-mode='discount'>Disc</button>
+        </t>
+        <t t-jquery=".mode-button[data-mode='price']" t-operation="replace">
+            <button class="mode-button" style="visibility: hidden" data-mode='price'>Price</button>
+        </t>
+        <t t-jquery=".input-button.numpad-minus" t-operation="replace">
+            <button class="input-button numpad-minus" style="visibility: hidden">+/-</button>
+        </t>
+    </t>
+
+    <t t-extend="ClientDetailsEdit">
+        <t t-jquery=".client-details-box" t-operation="replace">
+            <div class='client-details-box clearfix'>
+                <div class='client-details-left'>
+                    <div class='client-detail'>
+                        <span class='label'>NIT</span>
+                        <input class='detail vat' name='vat' t-att-value='partner.vat || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Street</span>
+                        <input class='detail client-address-street' name='street' value='Ciudad' t-att-value='partner.street' placeholder='Street'></input>
+                    </div>
+                </div>
+                <div class='client-details-right'>
+                    <div class='client-detail'>
+                        <span class='label'>Correo</span>
+                        <input class='detail client-email'  name='email' type='email' t-att-value='partner.email || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Phone</span>
+                        <input class='detail client-phone'  name='phone' type='tel' t-att-value='partner.phone || ""'></input>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+
+</templates>

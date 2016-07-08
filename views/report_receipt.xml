@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="distefano_receipt" name="distefano_receipt" inherit_id="point_of_sale.report_receipt">
+            <xpath expr="//div[@class='page']" position="replace">
+                <t t-if="o.session_id.order_ids[0].id == o.id and o.pos_reference">
+                <div class="page">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <span t-field="o.date_order"/>
+                            <span t-field="o.pos_reference"/>
+                        </div><br/>
+                        <div class="col-xs-12">
+                            <div t-field="o.company_id.name"/>
+                            Vogue Design, S.A.
+                            NIT: <span t-field="o.company_id.vat"/><br/>
+                            Tel.: <span t-field="o.company_id.phone"/><br/>
+                            <span t-field="o.company_id.website"/><br/>
+                            Vendedor: <span t-field="o.user_id.name"/><br/>
+                            <span t-field="o.session_id.name"/><br/>
+                            Fecha: <span t-field="o.date_order"/><br/>
+                            Cliente: <span t-field="o.partner_id.name"/><br/>
+                            NIT: <span t-field="o.partner_id.vat"/><br/>
+                        </div><br/>
+                        <div class="col-xs-12 text-center">
+                            <span t-field="o.session_id.config_id.receipt_header"/>
+                        </div><br/>
+                        Factura No. <t t-esc="o.numero_factura"/><br />
+                        REIMPRESION<br />
+                    </div>
+
+                    <div class="row">
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Item/Precio</th>
+                                <th class="text-right">Cant.</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.lines" t-as="line">
+                                <table style="font-size:10pt; margin-bottom:8px;" border="2">
+                                    <tr>
+                                        <td colspan="3"><span t-field="line.product_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                <span t-field="line.price_unit"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                x <span t-field="line.qty"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                <span t-esc="formatLang(net(line.id), currency_obj=res_company.currency_id)"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-right">
+                                        <strong t-esc="formatLang(o.amount_total, currency_obj=res_company.currency_id)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Payment Mode</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_journal_amt(o)" t-as="d">
+                                <td>
+                                    <span t-esc="d['name']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="formatLang(d['amt'], currency_obj=res_company.currency_id)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        Original: Cliente<br/>
+                        <br/>
+                        Sujeto a pagos trimestrales<br/>
+                        <t t-if="o.session_id.config_id.devoluciones">
+                        Politica de cambio: No quitar etiqueta de precio<br/>
+                        El cambio se podrá realizar únicamente en los siguientes 10 días después de la compra<br/>
+                        Para cambio de mercadería presentar factura de compra o número de factura<br/>
+                        Producto ofertado no tiene cambio<br/>
+                        </t>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <span t-field="o.date_order"/>
+                            <span t-field="o.pos_reference"/>
+                        </div><br/>
+                        <div class="col-xs-12">
+                            <div t-field="o.company_id.name"/>
+                            Vogue Design, S.A.
+                            NIT: <span t-field="o.company_id.vat"/><br/>
+                            Tel.: <span t-field="o.company_id.phone"/><br/>
+                            <span t-field="o.company_id.website"/><br/>
+                            Vendedor: <span t-field="o.user_id.name"/><br/>
+                            <span t-field="o.session_id.name"/><br/>
+                            Fecha: <span t-field="o.date_order"/><br/>
+                            Cliente: <span t-field="o.partner_id.name"/><br/>
+                            NIT: <span t-field="o.partner_id.vat"/><br/>
+                        </div><br/>
+                        <div class="col-xs-12 text-center">
+                            <span t-field="o.session_id.config_id.receipt_header"/>
+                        </div><br/>
+                        Factura No. <t t-esc="o.numero_factura"/><br />
+                        REIMPRESION<br />
+                    </div>
+
+                    <div class="row">
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Item/Precio</th>
+                                <th class="text-right">Cant.</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.lines" t-as="line">
+                                <table style="font-size:10pt; margin-bottom:8px;" border="2">
+                                    <tr>
+                                        <td colspan="3"><span t-field="line.product_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                <span t-field="line.price_unit"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                x <span t-field="line.qty"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                <span t-esc="formatLang(net(line.id), currency_obj=res_company.currency_id)"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-right">
+                                        <strong t-esc="formatLang(o.amount_total, currency_obj=res_company.currency_id)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Payment Mode</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_journal_amt(o)" t-as="d">
+                                <td>
+                                    <span t-esc="d['name']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="formatLang(d['amt'], currency_obj=res_company.currency_id)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        Copia: Archivo<br/>
+                        <br/>
+                        Sujeto a pagos trimestrales<br/>
+                        <t t-if="o.session_id.config_id.devoluciones">
+                        Politica de cambio: No quitar etiqueta de precio<br/>
+                        El cambio se podrá realizar únicamente en los siguientes 10 días después de la compra<br/>
+                        Para cambio de mercadería presentar factura de compra o número de factura<br/>
+                        Producto ofertado no tiene cambio<br/>
+                        </t>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <span t-field="o.date_order"/>
+                            <span t-field="o.pos_reference"/>
+                        </div><br/>
+                        <div class="col-xs-12">
+                            <div t-field="o.company_id.name"/>
+                            Vogue Design, S.A.
+                            NIT: <span t-field="o.company_id.vat"/><br/>
+                            Tel.: <span t-field="o.company_id.phone"/><br/>
+                            <span t-field="o.company_id.website"/><br/>
+                            Vendedor: <span t-field="o.user_id.name"/><br/>
+                            <span t-field="o.session_id.name"/><br/>
+                            Fecha: <span t-field="o.date_order"/><br/>
+                            Cliente: <span t-field="o.partner_id.name"/><br/>
+                            NIT: <span t-field="o.partner_id.vat"/><br/>
+                        </div><br/>
+                        <div class="col-xs-12 text-center">
+                            <span t-field="o.session_id.config_id.receipt_header"/>
+                        </div><br/>
+                        Factura No. <t t-esc="o.numero_factura"/><br />
+                        REIMPRESION<br />
+                    </div>
+
+                    <div class="row">
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Item/Precio</th>
+                                <th class="text-right">Cant.</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.lines" t-as="line">
+                                <table style="font-size:10pt; margin-bottom:8px;" border="2">
+                                    <tr>
+                                        <td colspan="3"><span t-field="line.product_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                <span t-field="line.price_unit"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                x <span t-field="line.qty"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-if="o.state != 'cancel' and o.statement_ids">
+                                                <span t-esc="formatLang(net(line.id), currency_obj=res_company.currency_id)"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-xs-6 pull-right">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-right">
+                                        <strong t-esc="formatLang(o.amount_total, currency_obj=res_company.currency_id)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Payment Mode</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_journal_amt(o)" t-as="d">
+                                <td>
+                                    <span t-esc="d['name']"/>
+                                </td>
+                                <td>
+                                    <span t-esc="formatLang(d['amt'], currency_obj=res_company.currency_id)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        Copia: Contabilidad<br/>
+                        <br/>
+                        Sujeto a pagos trimestrales<br/>
+                        <t t-if="o.session_id.config_id.devoluciones">
+                        Politica de cambio: No quitar etiqueta de precio<br/>
+                        El cambio se podrá realizar únicamente en los siguientes 10 días después de la compra<br/>
+                        Para cambio de mercadería presentar factura de compra o número de factura<br/>
+                        Producto ofertado no tiene cambio<br/>
+                        </t>
+                    </div>
+                </div>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</openerp>

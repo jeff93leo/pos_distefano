@@ -1,0 +1,89 @@
+<openerp>
+    <data>
+
+        <record id="inherit_view_pos_pos_distefano_devolucion" model="ir.ui.view">
+            <field name="name">pos.order.devolucion</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <button name="refund" position="replace">
+                        <button name="mix_and_match" string="Mix and Match" type="object" states="draft"/>
+                    </button>
+                    <button string="Reprint" position="replace"/>
+                    <field name="discount"  on_change="onchange_qty(product_id, discount, qty, price_unit, context)" position="replace">
+                        <field name="discount"  on_change="onchange_qty(product_id, discount, qty, price_unit, context)" groups="point_of_sale.group_pos_manager"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+        <menuitem action="account.action_bank_statement_tree" id="menu_extracto" parent="point_of_sale.menu_point_of_sale" string="Extractos bancarios" sequence="10"/>
+
+        <record id="action_pos_confirmar" model="ir.actions.act_window">
+            <field name="name">Confirmar</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pos.confirm</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem action="action_pos_confirmar" id="menu_pos_confirmar" parent="point_of_sale.menu_point_of_sale" string="Confirmar" sequence="20"/>
+
+        <record id="view_pos_config_form_distefano" model="ir.ui.view">
+            <field name="name">pos.config.form.view.distefano</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_config_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="journal_id" widget="selection" position="after">
+                        <field name="journal_manual_id" widget="selection"/>
+                    </field>
+                    <field name="iface_big_scrollbars" position="after">
+                        <field name="devoluciones"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+
+        <record id="view_pos_session_form_distefano" model="ir.ui.view">
+            <field name="name">pos.session.form.view.distefano</field>
+            <field name="model">pos.session</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="total_entry_encoding" position="after">
+                        <field name="total_entry_encoding" sum="Total"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_pos_order_filter_distefano" model="ir.ui.view">
+            <field name="name">pos.order.list.select.distefano</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_filter"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="name" position="before">
+                        <field name="invoice_id" filter_domain="[('invoice_id.number','ilike',self)]" string="Factura"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_pos_order_tree_distefano" model="ir.ui.view">
+            <field name="name">view.pos.order.tree.distefano</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="name" position="after">
+                        <field name="anulado"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>
