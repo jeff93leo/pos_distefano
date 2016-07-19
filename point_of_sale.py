@@ -5,6 +5,7 @@ import math
 from openerp import tools
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+import openerp.addons.decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
 
@@ -120,8 +121,15 @@ class pos_order(osv.osv):
 class pos_order_line(osv.osv):
     _inherit = "pos.order.line"
 
+    def _get_precio_unitario(self, cr, uid, ids, fieldnames, args, context=None):
+        result = dict.fromkeys(ids, False)
+        for line in self.browse(cr, uid, ids, context=context):
+            result[line.id] = line.price_unit
+        return result
+
     _columns= {
          'devuelto' : fields.boolean('Devuelto'),
+         'precio_unitario': fields.function(_get_precio_unitario, type="float", string="Precio Unit.", digits_compute=dp.get_precision('Account')),
     }
 
 class pos_confirm(osv.osv_memory):

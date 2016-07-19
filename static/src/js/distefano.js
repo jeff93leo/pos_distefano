@@ -81,7 +81,9 @@ openerp.pos_distefano = function(instance){
             var distefanoVendedores = $(QWeb.render('DistefanoVendedores'));
             var select = distefanoVendedores.find("select");
             self.pos.users.forEach(function(e, i) {
-                select.append(this.$("<option></option>").val(i).html(e.name));
+                if (e.ean13) {
+                    select.append(this.$("<option></option>").val(i).html(e.name));
+                }
             })
             select.change(function() {
                 var i = select.find("option:selected").val();
