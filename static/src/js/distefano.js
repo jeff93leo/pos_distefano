@@ -136,9 +136,16 @@ openerp.pos_distefano = function(instance){
         };
     }
 
+
+    // busqueda busqueda tpv cliente por nit, direccion, nombre..
     module.PosDB.include({
         _partner_search_string: function(partner){
             var str =  partner.name;
+            if(partner.vat){
+                str += '|' + partner.vat;
+
+            }
+
             if(partner.ean13){
                 str += '|' + partner.ean13;
             }
@@ -154,9 +161,7 @@ openerp.pos_distefano = function(instance){
             if(partner.email){
                 str += '|' + partner.email;
             }
-            if(partner.vat){
-                str += '|' + partner.vat;
-            }
+
             str = '' + partner.id + ':' + str.replace(':','') + '\n';
             return str;
         }
