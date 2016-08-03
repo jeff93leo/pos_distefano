@@ -12,11 +12,24 @@
             <select>
                 <option></option>
             </select>
-        </span>
-        <span id="factura-siguiente" style="font-size: 16px">
+            <span id="factura-siguiente" style="font-size: 18px">
+            </span>
         </span>
     </t>
 
+    <!-- agregando columna nit en tpv datos de cliente dentro de tpv -->
+
+    <t t-extend ="ClientLine">
+        <t t-jquery=".client-line" t-operation="replace">
+            <tr class='client-line' t-att-data-id='partner.id'> 
+                <td><t t-esc='partner.vat' /></td>
+                <td><t t-esc='partner.name' /></td>
+                <td><t t-esc='partner.address' /></td>
+                <td><t t-esc='partner.phone or partner.mobile or ""' /></td>
+            </tr>
+        </t>
+    </t>
+       
     <t t-extend="NumpadWidget">
         <t t-jquery=".mode-button[data-mode='discount']" t-operation="replace">
             <button class="mode-button" style="visibility: hidden" data-mode='discount'>Disc</button>
@@ -53,6 +66,23 @@
                     </div>
                 </div>
             </div>
+        </t>
+    </t>
+
+    <t t-extend = "ClientListScreenWidget">
+        <t t-jquery='.client-list' t-operation="replace">
+            <table class='client-list'>
+                <thead>
+                    <tr>
+                        <th>NIT</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>  
+                    </tr>
+                </thead>
+                <tbody class='client-list-contents'>
+                </tbody>
+            </table>
         </t>
     </t>
 
