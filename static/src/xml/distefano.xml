@@ -11,131 +11,25 @@
         <span>
             <select>
                 <option></option>
-
             </select>
+            <span id="factura-siguiente" style="font-size: 18px">
+            </span>
         </span>
     </t>
 
-<!-- agregando columna nit en tpv datos de cliente dentro de tpv -->
+    <!-- agregando columna nit en tpv datos de cliente dentro de tpv -->
 
-<t t-extend ="ClientLine">
-    <t t-jquery=".client-line" t-operation="replace">
-        <tr class='client-line' t-att-data-id='partner.id'> 
-            <td><t t-esc='partner.vat' /></td>
-            <td><t t-esc='partner.name' /></td>
-            <td><t t-esc='partner.address' /></td>
-            <td><t t-esc='partner.phone or partner.mobile or ""' /></td>
-        </tr>
-
-    </t>
-</t>
-
-    <!-- cambiando posicion de NIT tpv -->
-    <t t-extend="PosWidget">
-        <t t-jquery=".pos" t-operation="replace">
-            <div class="pos">
-            <div class="pos-topheader">
-                <div class="pos-branding">
-                    <img class="pos-logo" src="/point_of_sale/static/src/img/logo.png" />
-                    <span class="placeholder-UsernameWidget"></span>
-                </div>
-                <div class="pos-rightheader">
-                    <div class="order-selector">
-                        <span class="orders"></span>
-                        <span class="order-button square neworder-button"><i class='fa fa-plus' /></span>
-                        <span class="order-button square deleteorder-button"><i class='fa fa-minus' /></span>
-                    </div>
-                    <!-- here goes header buttons -->
-                </div>
-            </div>
-
-            <div class="pos-content">
-
-                <div class="pos-leftpane">
-                    <div class='window'>
-                        <div class='subwindow'>
-                            <div class='subwindow-container'>
-                                                <span id="factura-siguiente" style="font-size: 20px">
-                                                </span>
-                                <div class='subwindow-container-fix'>
-                                    <div class="placeholder-OrderWidget"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='subwindow collapsed'>
-                            <div class='subwindow-container'>
-                                <div class='subwindow-container-fix pads'>
-                                    <div class="control-buttons oe_hidden"></div>
-                                    <div class="placeholder-PaypadWidget"></div>
-                                    <div class="placeholder-NumpadWidget"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='subwindow collapsed'>
-                            <div class='subwindow-container'>
-                                <div class='subwindow-container-fix'>
-                                    <div class='placeholder-LeftActionBar'></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="rightpane">
-                    <div class='window'>
-                        <div class='subwindow'>
-                            <div class='subwindow-container'>
-                                <div class='subwindow-container-fix screens'>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='subwindow collapsed'>
-                            <div class='subwindow-container'>
-                                <div class='subwindow-container-fix'>
-                                    <div class='placeholder-RightActionBar'></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="placeholder-OnscreenKeyboardWidget"></div>
-            </div>
-
-            <div class="loader">
-                <div class='loader-feedback oe_hidden'>
-                    <h1 class='message'>Loading</h1>
-                    <div class='progressbar'>
-                        <div class='progress' width='50%'></div>
-                    </div>
-                    <div class='oe_hidden button skip'>
-                        Skip
-                    </div>
-                </div>
-            </div>
-
-            &lt;!--[if IE]&gt;
-            <div class='not-supported-browser'>
-                <div class='message'>
-                    <img src='/point_of_sale/static/src/img/pos_screenshot.jpg' />
-                    <p>
-                        The Point of Sale is not supported by Microsoft Internet Explorer. Please use
-                        a modern browser like <a href="http://www.mozilla.org/firefox/" target="_blank">Mozilla Firefox</a> 
-                        or <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a>. 
-                    </p>
-                </div>
-            </div>
-            &lt;![endif]--&gt;
-        </div>
+    <t t-extend ="ClientLine">
+        <t t-jquery=".client-line" t-operation="replace">
+            <tr class='client-line' t-att-data-id='partner.id'> 
+                <td><t t-esc='partner.vat' /></td>
+                <td><t t-esc='partner.name' /></td>
+                <td><t t-esc='partner.address' /></td>
+                <td><t t-esc='partner.phone or partner.mobile or ""' /></td>
+            </tr>
         </t>
     </t>
-
-
-
-
+       
     <t t-extend="NumpadWidget">
         <t t-jquery=".mode-button[data-mode='discount']" t-operation="replace">
             <button class="mode-button" style="visibility: hidden" data-mode='discount'>Disc</button>
@@ -174,39 +68,21 @@
             </div>
         </t>
     </t>
+
     <t t-extend = "ClientListScreenWidget">
-        <t t-jquery='.window' t-operation="replace">
-            <div class='window'>
-                <section class='subwindow collapsed'>
-                            <div class='subwindow-container collapsed'>
-                                <div class='subwindow-container-fix client-details-contents'>
-                                </div>
-                            </div>
-                        </section>
-                        <section class='subwindow'>
-                            <div class='subwindow-container'>
-                                <div class='subwindow-container-fix touch-scrollable scrollable-y'>
-                                    <table class='client-list'>
-                                        <thead>
-                                            <tr>
-                                                <th>NIT</th>
-                                                <th>Name</th>
-                                                <th>Address</th>
-                                                <th>Phone</th>
-                                                
-                                            </tr>
-                                        </thead>
-                                        <tbody class='client-list-contents'>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </section>
-
-
-            </div>
-
-
+        <t t-jquery='.client-list' t-operation="replace">
+            <table class='client-list'>
+                <thead>
+                    <tr>
+                        <th>NIT</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>  
+                    </tr>
+                </thead>
+                <tbody class='client-list-contents'>
+                </tbody>
+            </table>
         </t>
     </t>
 
