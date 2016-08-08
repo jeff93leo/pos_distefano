@@ -41,6 +41,34 @@
             <button class="input-button numpad-minus" style="visibility: hidden">+/-</button>
         </t>
     </t>
+    
+    <!-- Cambiando NIT de posicion TPV -->
+    <t t-extend="OrderWidget">
+        <t t-jquery=".order-container" t-operation="replace">
+	        <div class="order-container">
+	            <span id="factura-siguiente" style="font-size: 21px">D4-001676.</span>
+	            <div class="order-scroller touch-scrollable">
+	                <div class="order">
+	                    <ul class="orderlines">
+	                        <t t-if="orderlines.length === 0">
+	                            <li class="orderline empty">
+	                                Your shopping cart is empty
+	                            </li>
+	                        </t>
+	                    </ul>
+	                    <div class="summary clearfix">
+	                        <div t-attf-class="line #{orderlines.length === 0 ? 'empty' : ''}">
+	                            <div class='entry total'>
+	                                <span class="label">Total: </span> <span class="value">0.00 €</span>
+	                                <div class='subentry'>Taxes: <span class="value">0.00€</span></div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	    	</div>
+    	</t>
+    </t>
 
     <t t-extend="ClientDetailsEdit">
         <t t-jquery=".client-details-box" t-operation="replace">
