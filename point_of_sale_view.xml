@@ -14,6 +14,10 @@
                     <field name="discount"  on_change="onchange_qty(product_id, discount, qty, price_unit, context)" position="replace">
                         <field name="discount"  on_change="onchange_qty(product_id, discount, qty, price_unit, context)" groups="point_of_sale.group_pos_manager"/>
                     </field>
+                    <xpath expr="//field[@name='lines']/tree/field[@name='price_unit']" position="replace">
+                        <field name="price_unit" invisible="1" on_change="onchange_qty(product_id, discount, qty, price_unit, context)"/>
+                        <field name="precio_unitario" readonly="1"/>
+                    </xpath>
                 </data>
             </field>
         </record>
@@ -85,5 +89,11 @@
             </field>
         </record>
 
+        <!-- Agregando Kardex en Terminal Punto de Venta -->
+        <menuitem action="kardex.action_kardex_asistente"
+            name="Kardex"
+            sequence="15"
+            id="menu_kardex_form_usuario"  parent="point_of_sale.menu_point_of_sale"/>
+            
     </data>
 </openerp>
