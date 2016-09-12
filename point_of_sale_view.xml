@@ -41,6 +41,7 @@
                 <data>
                     <field name="journal_id" widget="selection" position="after">
                         <field name="journal_manual_id" widget="selection"/>
+                        <field name="journal_negativo_id"/>
                     </field>
                     <field name="iface_big_scrollbars" position="after">
                         <field name="devoluciones"/>

@@ -21,7 +21,7 @@
 
     <t t-extend ="ClientLine">
         <t t-jquery=".client-line" t-operation="replace">
-            <tr class='client-line' t-att-data-id='partner.id'> 
+            <tr class='client-line' t-att-data-id='partner.id'>
                 <td><t t-esc='partner.vat' /></td>
                 <td><t t-esc='partner.name' /></td>
                 <td><t t-esc='partner.address' /></td>
@@ -29,7 +29,7 @@
             </tr>
         </t>
     </t>
-       
+
     <t t-extend="NumpadWidget">
         <t t-jquery=".mode-button[data-mode='discount']" t-operation="replace">
             <button class="mode-button" style="visibility: hidden" data-mode='discount'>Disc</button>
@@ -41,9 +41,9 @@
             <button class="input-button numpad-minus" style="visibility: hidden">+/-</button>
         </t>
     </t>
-    
+
     <!-- Cambiando NIT de posicion TPV -->
-    <t t-extend="OrderWidget">
+    <!-- <t t-extend="OrderWidget">
         <t t-jquery=".order-container" t-operation="replace">
 	        <div class="order-container">
 	            <span id="factura-siguiente" style="font-size: 21px">D4-001676.</span>
@@ -68,7 +68,7 @@
 	            </div>
 	    	</div>
     	</t>
-    </t>
+    </t> -->
 
     <t t-extend="ClientDetailsEdit">
         <t t-jquery=".client-details-box" t-operation="replace">
@@ -105,7 +105,7 @@
                         <th>NIT</th>
                         <th>Name</th>
                         <th>Address</th>
-                        <th>Phone</th>  
+                        <th>Phone</th>
                     </tr>
                 </thead>
                 <tbody class='client-list-contents'>

@@ -3,9 +3,9 @@
     <data>
 
         <template id="assets_frontend" inherit_id="web.assets_common">
-          <xpath expr="." position="inside">
-              <script type="text/javascript" src="/pos_distefano/static/src/js/distefano.js"></script>
-          </xpath>
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/pos_distefano/static/src/js/distefano.js"></script>
+            </xpath>
         </template>
 
     </data>

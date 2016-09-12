@@ -6,6 +6,7 @@ from openerp import tools
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 import openerp.addons.decimal_precision as dp
+from openerp.tools import float_is_zero
 
 _logger = logging.getLogger(__name__)
 
@@ -81,26 +82,6 @@ class pos_order(osv.osv):
                         self.pool.get('pos.order.line').write(cr, uid, pareja[1].id, {'price_unit': pareja[1].product_id.list_price})
         return True
 
-    # def add_payment(self, cr, uid, order_id, data, context=None):
-    #     for o in self.browse(cr, uid, order_id, context=context):
-    #         total_descuento = 0
-    #         lineas_id = []
-    #         for l in o.lines:
-    #             lineas_id.append(l.id)
-    #             if l.qty < 0:
-    #                 total_descuento += -1 * l.qty * l.price_unit
-    #
-    #         if o.pedido_original.amount_total + 0.001 < total_descuento:
-    #             raise osv.except_osv(_('Error'), _('No se puede devolver por una cantidad mayor a lo comprado.'))
-    #
-    #         for l in o.pedido_original.lines:
-    #             if l.devuelto:
-    #                 raise osv.except_osv(_('Error'), _('Este pedido ya fue devuelto anteriormente, no puede ser devuelto dos veces.'))
-    #
-    #             self.pool.get('pos.order.line').write(cr, uid, [l.id], {'devuelto': True})
-    #
-    #     return = super(pos_order, self).add_payment(cr, uid, order_id, data, context=context)
-
     def action_invoice(self, cr, uid, ids, context=None):
         action = super(pos_order, self).action_invoice(cr, uid, ids, context=context)
         for o in self.browse(cr, uid, ids, context=context):
@@ -117,6 +98,53 @@ class pos_order(osv.osv):
                 self.action_invoice(cr, uid, [o.id], context)
                 self.pool['account.invoice'].signal_workflow(cr, uid, [o.invoice_id.id], 'invoice_open')
         return result
+
+    def _process_order(self, cr, uid, order, context=None):
+        session = self.pool.get('pos.session').browse(cr, uid, order['pos_session_id'], context=context)
+
+        if session.state == 'closing_control' or session.state == 'closed':
+            session_id = self._get_valid_session(cr, uid, order, context=context)
+            session = self.pool.get('pos.session').browse(cr, uid, session_id, context=context)
+            order['pos_session_id'] = session_id
+
+        order_id = self.create(cr, uid, self._order_fields(cr, uid, order, context=context),context)
+        journal_ids = set()
+        for payments in order['statement_ids']:
+            self.add_payment(cr, uid, order_id, self._payment_fields(cr, uid, payments[2], context=context), context=context)
+            journal_ids.add(payments[2]['journal_id'])
+
+        if session.sequence_number <= order['sequence_number']:
+            session.write({'sequence_number': order['sequence_number'] + 1})
+            session.refresh()
+
+        if not float_is_zero(order['amount_return'], self.pool.get('decimal.precision').precision_get(cr, uid, 'Account')):
+            # cash_journal = session.cash_journal_id.id
+            cash_journal = False
+            if session.config_id.journal_negativo_id:
+                cash_journal =  session.config_id.journal_negativo_id.id
+            if not cash_journal:
+                # Select for change one of the cash journals used in this payment
+                cash_journal_ids = self.pool['account.journal'].search(cr, uid, [
+                    ('type', '=', 'cash'),
+                    ('id', 'in', list(journal_ids)),
+                ], limit=1, context=context)
+                if not cash_journal_ids:
+                    # If none, select for change one of the cash journals of the POS
+                    # This is used for example when a customer pays by credit card
+                    # an amount higher than total amount of the order and gets cash back
+                    cash_journal_ids = [statement.journal_id.id for statement in session.statement_ids
+                                        if statement.journal_id.type == 'cash']
+                    if not cash_journal_ids:
+                        raise osv.except_osv( _('error!'),
+                            _("No cash statement found for this session. Unable to record returned cash."))
+                cash_journal = cash_journal_ids[0]
+            self.add_payment(cr, uid, order_id, {
+                'amount': -order['amount_return'],
+                'payment_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'payment_name': _('return'),
+                'journal': cash_journal,
+            }, context=context)
+        return order_id
 
 class pos_order_line(osv.osv):
     _inherit = "pos.order.line"
@@ -178,7 +206,8 @@ class pos_config(osv.osv):
         'relleno' : fields.related('journal_id', 'sequence_id', 'padding', type="integer", string="Relleno"),
         'pedidos_pendientes' : fields.function(_pedidos_pendientes, type="integer", string="Pedidos de pendientes"),
         'journal_manual_id' : fields.many2one('account.journal', 'Diario de ventas manual', domain=[('type', '=', 'sale')]),
-        'devoluciones' : fields.boolean('Devoluciones'),
+        'journal_negativo_id' : fields.many2one('account.journal', 'Diario de pagos negativos'),
+        'devoluciones' : fields.boolean('Se pueden hacer devoluciones'),
     }
 
 class pos_details(osv.osv_memory):

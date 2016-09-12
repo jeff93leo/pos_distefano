@@ -125,6 +125,7 @@ openerp.pos_distefano = function(instance){
         var num = ""+num;
         var siguiente_factura = this.config.prefijo+pad.substring(num.length) + num
         $('#factura-siguiente').text(siguiente_factura+'.');
+        console.log($('#factura-siguiente'));
 
         return pushed;
     }
