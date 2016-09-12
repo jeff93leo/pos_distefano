@@ -89,5 +89,11 @@
             </field>
         </record>
 
+        <!-- Agregando Kardex en Terminal Punto de Venta -->
+        <menuitem action="kardex.action_kardex_asistente"
+            name="Kardex"
+            sequence="15"
+            id="menu_kardex_form_usuario"  parent="point_of_sale.menu_point_of_sale"/>
+            
     </data>
 </openerp>
