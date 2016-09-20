@@ -95,7 +95,28 @@ openerp.pos_distefano = function(instance){
             this.$('.control-buttons').removeClass('oe_hidden');
         },
     });
+    
+    module.Order = module.Order.extend( {
+        getTotalQuantity: function() {
+	    return (this.get('orderLines')).reduce((function(sum, orderLine) {
+	        return sum + orderLine.get_quantity();
+	    }), 0);
+	},       
+    });
 
+    module.OrderWidget = module.OrderWidget.extend({
+        update_summary: function(){
+            var order = this.pos.get('selectedOrder');
+            var total     = order ? order.getTotalTaxIncluded() : 0;
+            var taxes     = order ? total - order.getTotalTaxExcluded() : 0;
+            var quantity  = order ? order.getTotalQuantity() : 0;
+
+            this.el.querySelector('.summary .total .quantity').textContent = quantity;
+            this.el.querySelector('.summary .total .value').textContent = this.format_currency(total);
+            this.el.querySelector('.summary .total .subentry .value').textContent = this.format_currency(taxes); 
+        },
+    });
+    
     var _super_add_product = module.Order.prototype.addProduct;
     module.Order.prototype.addProduct = function(product, options) {
         _super_add_product.call(this, product, options);
