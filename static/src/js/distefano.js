@@ -97,15 +97,15 @@ openerp.pos_distefano = function(instance){
     });
     
     module.Order = module.Order.extend( {
-		getTotalQuantity: function() {
-			return (this.get('orderLines')).reduce((function(sum, orderLine) {
-				return sum + orderLine.get_quantity();
-			}), 0);
-		},       
-	});
+        getTotalQuantity: function() {
+	    return (this.get('orderLines')).reduce((function(sum, orderLine) {
+	        return sum + orderLine.get_quantity();
+	    }), 0);
+	},       
+    });
 
     module.OrderWidget = module.OrderWidget.extend({
-	    update_summary: function(){
+        update_summary: function(){
             var order = this.pos.get('selectedOrder');
             var total     = order ? order.getTotalTaxIncluded() : 0;
             var taxes     = order ? total - order.getTotalTaxExcluded() : 0;
