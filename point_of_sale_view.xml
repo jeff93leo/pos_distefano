@@ -85,6 +85,7 @@
                 <data>
                     <field name="name" position="after">
                         <field name="anulado"/>
+                        <field name="devuelto"/>
                     </field>
                 </data>
             </field>
