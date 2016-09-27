@@ -110,6 +110,7 @@ class pos_distefano_anulacion_devolucion(osv.osv_memory):
                         'qty': -1 * l.cantidad,
                         'price_unit': l.linea.product_id.list_price
                     }, context=context)
+                    self.pool.get('pos.order.line').write(cr, uid, l.linea.id, {'devuelto': True}, context=context)
                     self.pool.get('pos.order').write(cr, uid, d.pedido.id, {'devuelto': True}, context=context)
 
                 abs = {
