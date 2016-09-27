@@ -17,6 +17,7 @@ class pos_order(osv.osv):
         'pedido_original' : fields.many2one('pos.order', 'Pedido original'),
         'numero_factura' : fields.char('Numero de factura a generar'),
         'anulado' : fields.boolean('Anulado'),
+        'devuelto': fields.boolean('Devuelto'),
         'sale_manual_journal': fields.related('session_id', 'config_id', 'journal_manual_id', relation='account.journal', type='many2one', string='Diario de ventas manual', store=True, readonly=True),
     }
 
