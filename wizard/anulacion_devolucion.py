@@ -110,7 +110,7 @@ class pos_distefano_anulacion_devolucion(osv.osv_memory):
                         'qty': -1 * l.cantidad,
                         'price_unit': l.linea.product_id.list_price
                     }, context=context)
-                    self.pool.get('pos.order.line').write(cr, uid, l.linea.id, {'devuelto': True}, context=context)
+                    self.pool.get('pos.order').write(cr, uid, d.pedido.id, {'devuelto': True}, context=context)
 
                 abs = {
                     'name': _('Return Products'),
@@ -128,7 +128,7 @@ class pos_distefano_anulacion_devolucion(osv.osv_memory):
 
     _columns = {
         'pedido': fields.many2one('pos.order', 'Pedido', required=True),
-        'tipo': fields.selection([('anular', 'Anular'), ('devolver', 'Devoler')], 'Operacion', required=True),
+        'tipo': fields.selection([('anular', 'Anular'), ('devolver', 'Devolver')], 'Operacion', required=True),
         'lineas': fields.one2many('pos_distefano.anulacion_devolucion.linea', 'anulacion_devolucion', 'Lineas'),
     }
 
