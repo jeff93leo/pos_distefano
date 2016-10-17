@@ -160,6 +160,17 @@ openerp.pos_distefano = function(instance){
         };
     }
 
+    var _super_show = module.ClientListScreenWidget.prototype.show;
+    module.ClientListScreenWidget.prototype.show = function(){
+        var pushed = _super_show.call(this);
+        this.$('.searchbox input').focus();
+    }
+
+    var _super_renderElement = module.ProductCategoriesWidget.prototype.renderElement;
+    module.ProductCategoriesWidget.prototype.renderElement = function(){
+        var pushed = _super_renderElement.call(this);
+        this.el.querySelector('.searchbox input').focus();
+    }    
 
     // busqueda busqueda tpv cliente por nit, direccion, nombre..
     module.PosDB.include({
