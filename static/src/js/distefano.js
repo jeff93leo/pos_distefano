@@ -1,7 +1,17 @@
 openerp.pos_distefano = function(instance){
     var module = instance.point_of_sale;
     var QWeb = instance.web.qweb;
-
+	
+    var displayBox =function(){
+        var date = new Date();
+        var hrs = date.getHours();
+        var min= date.getMinutes();
+        if ( (hrs==19 && (min>=30 || min<=31)) || (hrs==20 && (min>=15 || min<=16))){
+            window.alert('--------NO OLVIDE CERRAR SU SESIÓN POR FAVOR, GRACIAS.--------');
+        }
+    }
+    setInterval(displayBox,100000);
+	
     var mixAndMatch = function(orden) {
         var lineas = orden.get('orderLines')['models'];
 
