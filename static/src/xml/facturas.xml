@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
+    
     <t t-name ="PosTicket3">
         <t t-set="variable" t-value="0"/>
         <t t-foreach="order.getTicket()" t-as="name"> 
@@ -57,7 +58,6 @@
             Factura No. <t t-esc="order.numero_factura"/><br />
             <br />
             <table class="ticket-thead-table">
-
                 <tr style="font-size:12pt;font-weight:bold;border-bottom: 1px solid #000;word-spacing:2pt;">
                     <td width="40%">Item/Precio</td>
                     <td width="30%">Cant.</td>
@@ -67,11 +67,9 @@
                 <tr t-foreach="orderlines" t-as="orderline">
                     <t t-if="orderline.get_quantity() > 0">
                     <table style="font-size:10pt; margin-bottom:8px;" border="2">
-
                         <tr>
                             <td colspan="3"><t t-esc="orderline.get_product().default_code"/> <t t-esc="orderline.get_product().display_name"/></td>
                         </tr>
-
                         <tr>
                             <td width="40%">
                                 <t t-esc="widget.format_currency(orderline.get_unit_price())"/>
@@ -81,17 +79,13 @@
                                     </div>
                                 </t>
                             </td>
-
                             <td width="30%" style="padding-left:25px;">
                                 x <t t-esc="orderline.get_quantity()"/>
                             </td>
-
                             <td width="30%" class="pos-right-align">
                                 <t t-esc="widget.format_currency(orderline.get_display_price())"/>
                             </td>
-
                         </tr>
-
                     </table>
                     </t>
                 </tr>
@@ -145,7 +139,6 @@
             Copia: Archivo<br />
             <br />
             Sujeto a pagos trimestrales<br />
-            
             <t t-if="widget.pos.config.devoluciones">
             Politica de cambio: No quitar etiqueta de precio<br />
             El cambio se podrá realizar únicamente en los siguientes 10 días después de la compra<br />
@@ -179,7 +172,6 @@
             Factura No. <t t-esc="order.numero_factura"/><br />
             <br />
             <table class="ticket-thead-table">
-
                 <tr style="font-size:12pt;font-weight:bold;border-bottom: 1px solid #000;word-spacing:2pt;">
                     <td width="40%">Item/Precio</td>
                     <td width="30%">Cant.</td>
@@ -189,11 +181,9 @@
                 <tr t-foreach="orderlines" t-as="orderline">
                     <t t-if="orderline.get_quantity() > 0">
                     <table style="font-size:10pt; margin-bottom:8px;" border="2">
-
                         <tr>
                             <td colspan="3"><t t-esc="orderline.get_product().default_code"/> <t t-esc="orderline.get_product().display_name"/></td>
                         </tr>
-
                         <tr>
                             <td width="40%">
                                 <t t-esc="widget.format_currency(orderline.get_unit_price())"/>
@@ -203,17 +193,13 @@
                                     </div>
                                 </t>
                             </td>
-
                             <td width="30%" style="padding-left:25px;">
                                 x <t t-esc="orderline.get_quantity()"/>
                             </td>
-
                             <td width="30%" class="pos-right-align">
                                 <t t-esc="widget.format_currency(orderline.get_display_price())"/>
                             </td>
-
                         </tr>
-
                     </table>
                     </t>
                 </tr>
