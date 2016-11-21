@@ -111,7 +111,18 @@ openerp.pos_distefano = function(instance){
 	    return (this.get('orderLines')).reduce((function(sum, orderLine) {
 	        return sum + orderLine.get_quantity();
 	    }), 0);
-	},       
+	},
+        getTicket: function() {
+            var contador = 0;
+            var cantidad =  $("#cantidad_gift");
+            var arreglo = new Array(cantidad.val());
+            for (var i = 0; i < cantidad.val(); i++) {
+                contador = contador + 1;
+                arreglo[i] = contador;
+                //Do something
+            }
+            return arreglo;
+        },        
     });
 
     module.OrderWidget = module.OrderWidget.extend({
@@ -180,7 +191,51 @@ openerp.pos_distefano = function(instance){
     module.ProductCategoriesWidget.prototype.renderElement = function(){
         var pushed = _super_renderElement.call(this);
         this.el.querySelector('.searchbox input').focus();
-    }    
+    }
+    
+    var _super_display_checkbox = module.PaymentScreenWidget.prototype.update_payment_summary;
+    module.PaymentScreenWidget.prototype.update_payment_summary = function(){
+        _super_display_checkbox.call(this);
+        $("#cantidad_gift").hide();
+        this.$("#squaredFour").click(function(){
+            if(this.checked){
+                $("#cantidad_gift").show();
+            }else{
+                $("#cantidad_gift").hide();
+            }
+        });        
+    }
+
+    QWeb.add_template('/pos_distefano/static/src/xml/facturas.xml');
+    module.ReceiptScreenWidget.include({
+        refresh: function() {
+            var order = this.pos.get('selectedOrder');
+            $('.pos-receipt-container', this.$el).html(QWeb.render('PosTicket',{
+                    widget:this,
+                    order: order,
+                    orderlines: order.get('orderLines').models,
+                    paymentlines: order.get('paymentLines').models,
+                }));
+            $('.pos-receipt-container-p', this.$el).html(QWeb.render('PosTicket1',{
+                    widget:this,
+                    order: order,
+                    orderlines: order.get('orderLines').models,
+                    paymentlines: order.get('paymentLines').models,
+                }));
+            $('.pos-receipt-container-p2', this.$el).html(QWeb.render('PosTicket2',{
+                    widget:this,
+                    order: order,
+                    orderlines: order.get('orderLines').models,
+                    paymentlines: order.get('paymentLines').models,
+                }));
+            $('.pos-receipt-container-p3', this.$el).html(QWeb.render('PosTicket3',{
+                    widget:this,
+                    order: order,
+                    orderlines: order.get('orderLines').models,
+                    paymentlines: order.get('paymentLines').models,
+                }));
+        }
+    })    
 
     // busqueda busqueda tpv cliente por nit, direccion, nombre..
     module.PosDB.include({
