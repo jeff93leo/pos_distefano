@@ -126,4 +126,36 @@
         </t>
     </t>
 
+    <t t-extend="PaymentScreenWidget">
+        <t t-jquery=".payment-info" t-operation="replace">
+            <div class="payment-info">
+                <div class="infoline">
+                    <span class='left-block'>
+                        Paid:
+                    </span>
+                    <span class="right-block payment-paid-total"></span>
+                </div>
+                <div class="infoline">
+                    <span class='left-block'>
+                        Remaining:
+                    </span>
+                    <span class="right-block payment-remaining"></span>
+                </div>
+                <div class="infoline bigger" >
+                    <span class='left-block'>
+                        Change:
+                    </span>
+                    <span class="right-block payment-change"></span>
+                </div>
+                <div class="squaredFour">
+                    Regalos:<input type="checkbox" value="None" id="squaredFour" name="check" />
+                    <label for="squaredFour"></label>
+                </div>
+                <ul class="cantidad_gift">
+                    <input id="cantidad_gift" type="text" class="field-divided"/>
+                </ul>
+            </div>
+        </t>
+    </t>
+    
 </templates>
