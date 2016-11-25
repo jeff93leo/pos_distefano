@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
-
-    <t t-name="DistefanoMixMatch">
-        <div class='control-button'>
-            Mix and Match
-        </div>
-    </t>
-
+    
     <t t-name="DistefanoVendedores">
         <span>
             <select>
@@ -154,8 +148,50 @@
                 <ul class="cantidad_gift">
                     <input id="cantidad_gift" type="text" class="field-divided"/>
                 </ul>
+                <input type="checkbox" id="dinamica" style="visibility:hidden;"/>
             </div>
         </t>
     </t>
     
+    <t t-extend="PosWidget">
+        <t t-jquery=".pos-leftpane" t-operation="replace">
+            <div class="pos-leftpane">
+                <div class='window'>
+                    <div class='subwindow'>
+                        <div class='subwindow-container'>
+                            <div class='subwindow-container-fix'>
+
+                                <div class="placeholder-OrderWidget"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='subwindow collapsed'>
+                        <div class='subwindow-container'>
+                            <div class='subwindow-container-fix pads'>
+                                <div class="control-buttons-dinamica">
+                                    <ul>
+                                        <li><button id="BI" style="width:200px;height:40px;">Dinamica BI</button></li>
+                                        <li><button id="DistefanoMixMatch" style="width:200px;height:40px;">MixAndMatch</button></li>
+                                    </ul>
+                                </div>
+                                <div class="control-buttons oe_hidden"></div>
+                                <div class="placeholder-PaypadWidget"></div>
+                                <div class="placeholder-NumpadWidget"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='subwindow collapsed'>
+                        <div class='subwindow-container'>
+                            <div class='subwindow-container-fix'>
+                                <div class='placeholder-LeftActionBar'></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </t>
+
 </templates>

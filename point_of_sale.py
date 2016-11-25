@@ -16,6 +16,7 @@ class pos_order(osv.osv):
     _columns= {
         'pedido_original' : fields.many2one('pos.order', 'Pedido original'),
         'numero_factura' : fields.char('Numero de factura a generar'),
+        'dinamica': fields.char('Dinamica Bi'),
         'anulado' : fields.boolean('Anulado'),
         'devuelto': fields.boolean('Devuelto'),
         'sale_manual_journal': fields.related('session_id', 'config_id', 'journal_manual_id', relation='account.journal', type='many2one', string='Diario de ventas manual', store=True, readonly=True),
@@ -25,6 +26,7 @@ class pos_order(osv.osv):
         return {
             'name':         ui_order['name'],
             'user_id':      ui_order['user_id'] or False,
+            'dinamica':     ui_order['dinamica'] or False,
             'session_id':   ui_order['pos_session_id'],
             'lines':        ui_order['lines'],
             'pos_reference':ui_order['name'],
@@ -95,7 +97,11 @@ class pos_order(osv.osv):
         for o in self.browse(cr, uid, ids, context=context):
             if o.amount_total > 0:
                 if not o.partner_id:
-                    self.write(cr, uid, [o.id], {'partner_id': 320334}, context=context)
+                    self.write(cr, uid, [o.id], {'partner_id': 320334},context=context)
+                    if o.dinamica==True:
+                        self.write(cr, uid, [o.id], {'dinamica': True},context=context)
+                if o.dinamica==True:
+                    self.write(cr, uid, [o.id], {'dinamica': True},context=context)
                 self.action_invoice(cr, uid, [o.id], context)
                 self.pool['account.invoice'].signal_workflow(cr, uid, [o.invoice_id.id], 'invoice_open')
         return result

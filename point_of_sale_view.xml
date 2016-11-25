@@ -18,6 +18,9 @@
                         <field name="price_unit" invisible="1" on_change="onchange_qty(product_id, discount, qty, price_unit, context)"/>
                         <field name="precio_unitario" readonly="1"/>
                     </xpath>
+                    <field name="partner_id" position="after">
+                        <field name="dinamica"/>
+                    </field>
                 </data>
             </field>
         </record>
