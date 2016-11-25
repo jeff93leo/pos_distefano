@@ -1,7 +1,7 @@
 openerp.pos_distefano = function(instance){
     var module = instance.point_of_sale;
     var QWeb = instance.web.qweb;
-	
+    
     var displayBox =function(){
         var date = new Date();
         var hrs = date.getHours();
@@ -11,7 +11,7 @@ openerp.pos_distefano = function(instance){
         }
     }
     setInterval(displayBox,100000);
-	
+    
     var mixAndMatch = function(orden) {
         var lineas = orden.get('orderLines')['models'];
 
@@ -55,7 +55,7 @@ openerp.pos_distefano = function(instance){
                 // uno impar, por lo que tiene un 25% de descuento
                 var precio = p['precio'];
                 if (p['precio'] == p['precio_original']) {
-                    precio = p['precio'] * 0.75
+                    precio = p['precio'] * 0.75;
                 }
 
                 var l = p['linea'].clone();
@@ -72,6 +72,42 @@ openerp.pos_distefano = function(instance){
         }
     }
 
+    var bancoIndustrial = function(orden) {
+        var lineas = orden.get('orderLines')['models'];
+
+        if (lineas.length > 0) {
+
+            var productos = [];
+            var cantidad = 0;
+
+            lineas.forEach(function(l) {
+
+                // Para evitar que si se hace el mix and mach nuevamente
+                // se haga un doble descuento.
+                if (!("precio_original" in l)) {
+                    l['precio_original'] = l.get_unit_price();
+                }
+                for (i = 0; i < l.get_quantity(); i++) {
+                    productos.push({'linea': l, 'precio': l['precio_original'], 'precio_original': l['precio_original']});
+                }
+                cantidad += l.get_quantity();
+            })
+
+            productos.sort(function(a, b) {
+                return a['precio'] - b['precio'];
+            })
+
+            productos.forEach(function(p) {
+                //Tiene un 60% de descuento
+                var precio = p['precio'] * 0.40;
+                var l = p['linea'];
+                l.set_quantity(1);
+                l.set_unit_price(precio);
+
+            })
+        }
+    }
+
     QWeb.add_template('/pos_distefano/static/src/xml/distefano.xml');
 
     module.PosWidget.include({
@@ -79,14 +115,25 @@ openerp.pos_distefano = function(instance){
             var self = this;
             this._super();
 
-            // var distefanoMixMatch = $(QWeb.render('DistefanoMixMatch'));
-            //
-            // distefanoMixMatch.click(function() {
-            //     var orden = self.pos.get('selectedOrder');
-            //     mixAndMatch(orden);
-            // });
-            //
-            // distefanoMixMatch.appendTo(this.$('.control-buttons'));
+            //boton de Mix & Match
+            var distefanoMixMatch = $('#DistefanoMixMatch');
+            distefanoMixMatch.click(function() {
+                var orden = self.pos.get('selectedOrder');
+                mixAndMatch(orden);
+            });
+            
+            distefanoMixMatch.appendTo(this.$('.control-buttons-dinamica'));
+
+            // boton de Banco Industrial
+            var bancoBi = $('#BI');
+            bancoBi.click(function() {
+                window.prompt("Favor ingresar los ultimos 4 digitos de la tarjeta","****");
+                var orden = self.pos.get('selectedOrder');
+                bancoIndustrial(orden);
+                $('#dinamica').prop('checked', true);
+            });
+
+            bancoBi.appendTo(this.$('.control-buttons-dinamica'));
 
             var distefanoVendedores = $(QWeb.render('DistefanoVendedores'));
             var select = distefanoVendedores.find("select");
@@ -108,10 +155,10 @@ openerp.pos_distefano = function(instance){
     
     module.Order = module.Order.extend( {
         getTotalQuantity: function() {
-	    return (this.get('orderLines')).reduce((function(sum, orderLine) {
-	        return sum + orderLine.get_quantity();
-	    }), 0);
-	},
+            return (this.get('orderLines')).reduce((function(sum, orderLine) {
+                return sum + orderLine.get_quantity();
+            }), 0);
+        },
         getTicket: function() {
             var contador = 0;
             var cantidad =  $("#cantidad_gift");
@@ -119,10 +166,13 @@ openerp.pos_distefano = function(instance){
             for (var i = 0; i < cantidad.val(); i++) {
                 contador = contador + 1;
                 arreglo[i] = contador;
-                //Do something
             }
             return arreglo;
-        },        
+        },
+        getBi: function(){
+            var dinamica = $('#dinamica').prop("checked");
+            return dinamica;
+        }        
     });
 
     module.OrderWidget = module.OrderWidget.extend({
@@ -143,7 +193,7 @@ openerp.pos_distefano = function(instance){
         _super_add_product.call(this, product, options);
 
         var orden = this.pos.get('selectedOrder');
-        mixAndMatch(orden);
+        // mixAndMatch(orden);
     }
 
     var _super_export_as_JSON = module.Order.prototype.export_as_JSON;
@@ -153,7 +203,10 @@ openerp.pos_distefano = function(instance){
         var pad = Array(this.pos.config.relleno+1).join("0");
         var num = this.pos.config.numero_siguiente+this.pos.config.pedidos_pendientes;
         var num = ""+num;
+        var bi=$('#dinamica').prop("checked");
+        JSON['dinamica'] =bi;
         JSON['numero_factura'] = this.pos.config.prefijo+pad.substring(num.length) + num;
+        this.dinamica = JSON['dinamica'];
         this.numero_factura = JSON['numero_factura'];
         return JSON;
     }
@@ -165,6 +218,8 @@ openerp.pos_distefano = function(instance){
         var pad = Array(this.config.relleno+1).join("0");
         var num = this.config.numero_siguiente+this.config.pedidos_pendientes;
         var num = ""+num;
+        var dinamica = $('#dinamica').prop("checked");
+        $('#dinamica').prop("checked",dinamica);
         var siguiente_factura = this.config.prefijo+pad.substring(num.length) + num
         $('#factura-siguiente').text(siguiente_factura+'.');
         console.log($('#factura-siguiente'));
@@ -192,18 +247,18 @@ openerp.pos_distefano = function(instance){
         var pushed = _super_renderElement.call(this);
         this.el.querySelector('.searchbox input').focus();
     }
-    
+
     var _super_display_checkbox = module.PaymentScreenWidget.prototype.update_payment_summary;
     module.PaymentScreenWidget.prototype.update_payment_summary = function(){
         _super_display_checkbox.call(this);
-        $("#cantidad_gift").hide();
+        $('#dinamica').show();
         this.$("#squaredFour").click(function(){
             if(this.checked){
                 $("#cantidad_gift").show();
             }else{
                 $("#cantidad_gift").hide();
             }
-        });        
+        });     
     }
 
     QWeb.add_template('/pos_distefano/static/src/xml/facturas.xml');
@@ -235,7 +290,7 @@ openerp.pos_distefano = function(instance){
                     paymentlines: order.get('paymentLines').models,
                 }));
         }
-    })    
+    })
 
     // busqueda busqueda tpv cliente por nit, direccion, nombre..
     module.PosDB.include({
