@@ -153,7 +153,7 @@
         </t>
     </t>
     
-    <t t-extend="PosWidget">
+<!--     <t t-extend="PosWidget">
         <t t-jquery=".pos-leftpane" t-operation="replace">
             <div class="pos-leftpane">
                 <div class='window'>
@@ -193,5 +193,5 @@
             </div>
         </t>
     </t>
-
+ -->
 </templates>
