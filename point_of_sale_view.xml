@@ -19,7 +19,7 @@
                         <field name="precio_unitario" readonly="1"/>
                     </xpath>
                     <field name="partner_id" position="after">
-                        <field name="dinamica"/>
+                        <field name="dinamica" invisible="1"/>
                     </field>
                 </data>
             </field>

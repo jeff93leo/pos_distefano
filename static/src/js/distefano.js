@@ -2,15 +2,15 @@ openerp.pos_distefano = function(instance){
     var module = instance.point_of_sale;
     var QWeb = instance.web.qweb;
     
-    var displayBox =function(){
-        var date = new Date();
-        var hrs = date.getHours();
-        var min= date.getMinutes();
-        if ( (hrs==19 && (min>=30 || min<=31)) || (hrs==20 && (min>=15 || min<=16))){
-            window.alert('--------NO OLVIDE CERRAR SU SESIÓN POR FAVOR, GRACIAS.--------');
-        }
-    }
-    setInterval(displayBox,100000);
+    // var displayBox =function(){
+    //     var date = new Date();
+    //     var hrs = date.getHours();
+    //     var min= date.getMinutes();
+    //     if ( (hrs==19 && (min>=30 || min<=31)) || (hrs==20 && (min>=15 || min<=16))){
+    //         window.alert('--------NO OLVIDE CERRAR SU SESIÓN POR FAVOR, GRACIAS.--------');
+    //     }
+    // }
+    // setInterval(displayBox,100000);
     
     var mixAndMatch = function(orden) {
         var lineas = orden.get('orderLines')['models'];
@@ -115,25 +115,25 @@ openerp.pos_distefano = function(instance){
             var self = this;
             this._super();
 
-            //boton de Mix & Match
-            var distefanoMixMatch = $('#DistefanoMixMatch');
-            distefanoMixMatch.click(function() {
-                var orden = self.pos.get('selectedOrder');
-                mixAndMatch(orden);
-            });
+            // //boton de Mix & Match
+            // var distefanoMixMatch = $('#DistefanoMixMatch');
+            // distefanoMixMatch.click(function() {
+            //     var orden = self.pos.get('selectedOrder');
+            //     mixAndMatch(orden);
+            // });
             
-            distefanoMixMatch.appendTo(this.$('.control-buttons-dinamica'));
+            // distefanoMixMatch.appendTo(this.$('.control-buttons-dinamica'));
 
-            // boton de Banco Industrial
-            var bancoBi = $('#BI');
-            bancoBi.click(function() {
-                window.prompt("Favor ingresar los ultimos 4 digitos de la tarjeta","****");
-                var orden = self.pos.get('selectedOrder');
-                bancoIndustrial(orden);
-                $('#dinamica').prop('checked', true);
-            });
+            // // boton de Banco Industrial
+            // var bancoBi = $('#BI');
+            // bancoBi.click(function() {
+            //     window.prompt("Favor ingresar los ultimos 4 digitos de la tarjeta","****");
+            //     var orden = self.pos.get('selectedOrder');
+            //     bancoIndustrial(orden);
+            //     $('#dinamica').prop('checked', true);
+            // });
 
-            bancoBi.appendTo(this.$('.control-buttons-dinamica'));
+            // bancoBi.appendTo(this.$('.control-buttons-dinamica'));
 
             var distefanoVendedores = $(QWeb.render('DistefanoVendedores'));
             var select = distefanoVendedores.find("select");
@@ -169,10 +169,10 @@ openerp.pos_distefano = function(instance){
             }
             return arreglo;
         },
-        getBi: function(){
-            var dinamica = $('#dinamica').prop("checked");
-            return dinamica;
-        }        
+        // getBi: function(){
+        //     var dinamica = $('#dinamica').prop("checked");
+        //     return dinamica;
+        // }        
     });
 
     module.OrderWidget = module.OrderWidget.extend({
@@ -193,7 +193,7 @@ openerp.pos_distefano = function(instance){
         _super_add_product.call(this, product, options);
 
         var orden = this.pos.get('selectedOrder');
-        // mixAndMatch(orden);
+        mixAndMatch(orden);
     }
 
     var _super_export_as_JSON = module.Order.prototype.export_as_JSON;
@@ -251,7 +251,8 @@ openerp.pos_distefano = function(instance){
     var _super_display_checkbox = module.PaymentScreenWidget.prototype.update_payment_summary;
     module.PaymentScreenWidget.prototype.update_payment_summary = function(){
         _super_display_checkbox.call(this);
-        $('#dinamica').show();
+        // $('#dinamica').show();
+        $("#cantidad_gift").hide();
         this.$("#squaredFour").click(function(){
             if(this.checked){
                 $("#cantidad_gift").show();
