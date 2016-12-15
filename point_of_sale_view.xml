@@ -63,6 +63,9 @@
                     <field name="total_entry_encoding" position="after">
                         <field name="total_entry_encoding" sum="Total"/>
                     </field>
+                    <field name="start_at" position="after">
+                        <field name="stock_location_id"/>
+                    </field>
                 </data>
             </field>
         </record>
