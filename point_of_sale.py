@@ -227,6 +227,10 @@ class pos_details(osv.osv_memory):
 
 class pos_session(osv.osv):
     _inherit = 'pos.session'
+    
+    _columns = {
+        'stock_location_id':fields.many2one('stock.location','ubicacion'),
+    }    
 
     def _confirm_orders(self, cr, uid, ids, context=None):
         for session in self.browse(cr, uid, ids, context=context):
@@ -242,3 +246,9 @@ class pos_session(osv.osv):
                             _("No se puede cerrar la sesion por que existen pedidos que tienen facturas que no han sido validadas."))
 
         return super(pos_session, self)._confirm_orders(cr, uid, ids, context=context)
+    
+class res_users(osv.osv):
+    _inherit = 'res.users'
+    _columns = {
+        'stock_location_id': fields.many2one('stock.location','ubicacion'),
+    }
